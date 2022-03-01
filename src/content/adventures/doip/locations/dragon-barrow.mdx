@@ -1,0 +1,186 @@
+---
+title: Dragon Barrow
+map:
+  image: ../images/map-db-pc.jpg
+  width: 66
+  height: 42
+  padding: 1.75% ​1.5% 1.75% 1.75%
+areas:
+- name: Secret Entrance
+  x: 28
+  y: 26
+  flags:
+  - secret
+  content: |
+    #### Occuptants
+    * None.
+
+    #### Environment
+    * One of the stones atop the hill act as a plug embedded in the earth.
+        * PC can spot an opening beneath base of the rock w/ **DC 10 Wisdom (Perception)**.
+
+    #### Developments
+    * Lashing ropes around stone, PCs can topple rock w/ **DC 19 Strength (Athletics)**
+    * **Knock** spell can also cause it to topple over.
+    * Opening beneath rock reveals 2 ft wide spiral staircase w/ flagstone steps, descending 30 ft to <a href='/adventures/doip/locations/dragon-barrow-int'>Dragon Barrow (Interior)</a>.
+- name: Will-o'-Wisps
+  flags:
+  - villain
+  - trap
+  content: |
+    #### Occupants
+    * 3 [Will-o'-Wisp](https://dndbeyond.com/monsters/will-o-wisp)s live here.
+        * When PCs enter, these become illuminated and hover towards their respective traps in the three **area 3** pit traps.
+        * Each has its own pit trap and attacks any PC that falls into its trap.
+        * If reduced to 7 HP or lower, it turns invisible and flees.
+  x: 52
+  y: 18
+- name: Concealed Pit Traps
+  flags:
+  - trap
+  traps:
+  - x: 49
+    y: 11
+    h: 1
+    w: 1
+  - x: 43
+    y: 19
+    h: 1
+    w: 1
+  - x: 52
+    y: 22
+    h: 1
+    w: 1
+  flavor: |
+    Before you dances a floating ball of light. It pulses and bobs as if dancing to some unheard melody. It seems curious and encouraged by your approach.
+  content: |
+    #### Occupants
+    * The aforemntioned Will-o'-Wisps, each hover near their resptive traps, luring PCs to fall.
+    #### Environment
+    * Each of the three traps are 5ft wide, 10 ft deep, and are dug out of the earth.
+        * Rows of rusty swords are embedded into the floor of each pit, covered by rotted pllanks of wood under a thin layer of dirt.
+        * PC using a pole or similar tool to prod ahead detects the trap w/ **DC 10 Wisdom (Perception)**.
+        * PC that falls into trap, takes 1d6 bludgeoning damage and impales themselves on 1d4 swords, each of which deals 1d6 piercing damage.
+  x: 48
+  y: 11
+- name: Skeletal Surprise
+  x: 50
+  y: 24
+  flags:
+  - person
+  flavor: |
+    Walking through the neck of this skeleton, you come into a large chamber made from the hollowed out skull of Azdraka. You are standing inside the jaws of the beast and before you on the earthen floor lays a pile of curious bones.
+  content: |
+    #### Occupants
+    * A [Skeletal Horse](https://www.dndbeyond.com/monsters/riding-horse) rests here.
+    #### Developments
+    * When any PC approaches within 5 ft of skeleton, it knits together and rises.
+          * It bonds with any PC that attempts to ride it.
+    #### Treasure
+    * Lady Alagondar's saddle is found here.
+- name: Narrow Tunnel
+  x: 56
+  y: 20
+  flags:
+  - trap
+  traps:
+  - type: area
+    x: 55
+    y: 20
+    w: 1
+    h: 1
+  flavor: |
+    This narrow passage way is unlit, leaving the skeletal structure you have been travelling so far, the dirt walls are wet.
+  content: |
+    #### Occupants
+    * None.
+    #### Environment
+    * This tunnel is only 2ft wide.
+    * At the halfway point, a 5 ft pressure-plate is hidden under a 2-inch-thick layer of earth.
+        * PC prodding ahead w/ pole or similar can detect the plate w/ **DC 10 Wisdom (Perception)**.
+        * First PC that steps on plate causes walls of the tunnel to collapse inward, burying all PCs in tunnel.
+            * Buried PC is **blinded** and **restrained**, has **total cover**, and begins to **suffocate**.
+        * Only PCs not trapped can clear away collapse, using an action to clear 5-ft-deep section of tunnel closest to it.
+            * Creature in that space is no longer buried.
+- name: False Tomb
+  x: 61
+  y: 21
+  flags:
+  - trap
+  traps:
+  - type: area
+    x: 58
+    y: 21
+    w: 2
+    h: 2
+  - type: area
+    x: 63
+    y: 21
+    w: 2
+    h: 2
+  content: |
+    #### Occupants
+    * None.
+    #### Environment
+    * 2 sealed stone sarcophagi rest in alcoves along south wall.
+        * Nothing in either sarcophagi.
+    #### Developments
+    * Each sarcophagus releases a cloud of **corrosive** dust when opened, filling the 10-ft-by-10-ft area north of sarcophagus.
+        * Non-magical weapons will become corroded and suffer a permanent **-1** to damage (weapons that reach **-5 damage** break apart).
+        * PC caught in dust cloud make **DC 15 Dexterity Saving Throw**, taking 4d6 acid damage on fail; half on success. Then cloud disappears.
+- name: Adventurer's Sepulcher
+  x: 39
+  y: 20
+  flags:
+  - loot
+  content: |
+    #### Occupants
+    * None.
+    #### Environment
+    * 4 sarcophagi line the walls here.
+        * They contain the moldy bones of adventurers who perished fighting **Azdraka** (a bard, a cleric, a fighter, and wizard).
+    #### Treasure
+    * NW sarc. contains the bard w/ a [Lute of Illusions](https://www.dndbeyond.com/magic-items/instrument-of-illusions).
+    * SE sarc. contains the wizard w/ a [Necklace of Fireballs](https://www.dndbeyond.com/magic-items/necklace-of-fireballs).
+- name: Dragon Slayer
+  x: 49
+  y: 6
+  flags:
+  - loot
+  - villain
+  callout: |
+    #### Invisibility Rules
+    * See video in links for a DM explaining how to play the invisible stalker here. https://www.youtube.com/watch?v=mpRkmypRQH8
+  content: |
+    #### Occupants
+    * 1 [Invisible Stalker](https://www.dndbeyond.com/monsters/invisible-stalker) guards **Lady Alagondar**'s sword.
+    #### Environment
+    * 2 sarcophagi in alcoves contain bones and rusty armor of **Lady Alagondar** and her faithful squire. Nothing of value.
+    * On a pedestal, lays her longsword.
+    #### Developments
+    * If the sword is taken, the **Invisible Stalker** attacks any PC in the area until sword is replaced or defeated.
+---
+### Arrival
+<div className="flavor">
+
+  A thirty-foot-high hill rises ahead of you, its top too flat to be a natural occurrence. Jutting from the grassy hilltop is a row of ten-foot-tall, bone-white rocks that arc toward the stormy sky like outstretched talons.
+</div>
+
+* PCs that reach top can notice dragon-like shape with **DC 10 Wisdom (Insight)**. Furthermore the stones protruding from the hill are actually my of bone.
+* _At night_, **Will-o'-wisps** emerge from Secret Entrance (**area 1**) using their _Incorporeal Movement_ and float above the barrow, hoping to attract prey.
+  * If PCs notice them, they turn invisible and withdraw into the barrow.
+* Upon entry to the barrow,
+
+<div className="flavor">
+
+Winding your way down steps of alternating stone and bone, you find yourselves passing through the actual spinal column of a gigantic creature that has been hollowed out.
+</div>
+
+### CATACOMBS FEATURES
+
+A series of chambers and tunnels at ground level form the catacombs beneath the barrow mound. They reek of damp earth and stale, deathly air.
+
+* **_Ceilings_**. Ceilings throughout are 8-ft-high and flat.
+* **_Earthen Construction_**. All tunnels and rooms have walls, floors, and roofs made of packed earth.
+* **_Light_**. There is no light within the barrow. PCs require darkvision or their own light sources to see inside.
+* **_Sarcophagi_**. The sarcophagi found throughout the catacombs are carved from solid blocks of granite and sealed with heavy granite lids. The seals are airtight. Lifting a lid requires **DC 20 Strength (Athletics)**. Each lid is a Medium object with **AC 17, 12 hit points, and immunity to poison and psychic damage**.

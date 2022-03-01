@@ -1,6 +1,6 @@
 {
   "name": "dungeon-master-s-compaign-manager",
-  "version": "1.0.0",
+  "version": "0.0.3",
   "private": true,
   "description": "Dungeon Master's Compaign Manager",
   "author": "Garrett Vorbeck",
@@ -15,17 +15,32 @@
     "clean": "gatsby clean"
   },
   "dependencies": {
+    "@emotion/react": "^11.8.1",
+    "@emotion/styled": "^11.8.1",
     "@mdx-js/mdx": "^1.6.22",
     "@mdx-js/react": "^1.6.22",
+    "@mui/icons-material": "^5.4.4",
+    "@mui/material": "^5.4.4",
     "gatsby": "^4.8.0",
     "gatsby-plugin-image": "^2.8.1",
     "gatsby-plugin-mdx": "^3.8.1",
     "gatsby-plugin-react-helmet": "^5.8.0",
     "gatsby-plugin-sharp": "^4.8.1",
     "gatsby-source-filesystem": "^4.8.1",
+    "gatsby-theme-material-ui": "^5.1.0",
     "gatsby-transformer-sharp": "^4.8.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-helmet": "^6.1.0"
+    "react-helmet": "^6.1.0",
+    "react-icons": "^4.3.1",
+    "showdown": "^2.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.29.2",
+    "eslint-plugin-react-hooks": "^4.3.0"
   }
 }

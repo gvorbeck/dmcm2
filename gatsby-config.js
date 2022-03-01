@@ -1,21 +1,29 @@
 module.exports = {
   siteMetadata: {
-      title: `Dungeon Master's Compaign Manager`,
-    siteUrl: `https://www.yourdomain.tld`
+    title: 'Dungeon Master\'s Compaign Manager',
+    siteUrl: 'https://www.yourdomain.tld',
   },
-  plugins: ["gatsby-plugin-image", "gatsby-plugin-react-helmet", "gatsby-plugin-mdx", "gatsby-plugin-sharp", "gatsby-transformer-sharp", {
+  plugins: ['gatsby-plugin-image', 'gatsby-plugin-react-helmet', 'gatsby-plugin-mdx', 'gatsby-plugin-sharp', 'gatsby-transformer-sharp', {
     resolve: 'gatsby-source-filesystem',
     options: {
-      "name": "images",
-      "path": "./src/images/"
+      name: 'images',
+      path: './src/images/',
     },
-    __key: "images"
+    __key: 'images',
   }, {
     resolve: 'gatsby-source-filesystem',
     options: {
-      "name": "pages",
-      "path": "./src/pages/"
+      name: 'pages',
+      path: './src/pages/',
     },
-    __key: "pages"
-  }]
+    __key: 'pages',
+  },
+  {
+    resolve: 'gatsby-source-filesystem',
+    options: {
+      name: 'content',
+      path: './src/content/',
+    },
+    __key: 'content',
+  }],
 };
