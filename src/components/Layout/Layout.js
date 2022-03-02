@@ -3,9 +3,12 @@ import {
   AppBar, Box, Container, Stack, Typography,
 } from '@mui/material';
 import { Link } from 'gatsby-theme-material-ui';
+import { Helmet } from 'react-helmet';
 import { GiBlackBridge } from 'react-icons/gi';
-// import theme from '../../theme';
-import { SITE_SHORT_NAME, FOOTER_COPY, COLORS } from '../../utils/constants';
+import { useTheme } from '@mui/styles';
+import {
+  SITE_NAME, SITE_SHORT_NAME, FOOTER_COPY,
+} from '../../utils/constants';
 import Navigation from '../Navigation/Navigation';
 
 function CustomContainer(props) {
@@ -14,84 +17,89 @@ function CustomContainer(props) {
 
 function Layout(props) {
   const { children, hideNavigation, title } = props;
+  const theme = useTheme();
   return (
-    <Stack color={COLORS.tertiary.main}>
-      <AppBar
-        component={CustomContainer}
-        position="relative"
-        sx={{
-          py: 1,
-          minHeight: '68px',
-        }}
-      >
-        <Box
-          color={COLORS.tertiary.contrastText}
+    <>
+      <Helmet defaultTitle="DMCM" title={`${title} | ${SITE_NAME}`} />
+      <Stack color={theme.palette.tertiary.main}>
+        <AppBar
+          component={CustomContainer}
+          position="relative"
           sx={{
-            background: COLORS.tertiary.main,
-            display: 'flex',
-            flexDirection: 'column',
-            p: 0.5,
-            position: 'absolute',
-            textAlign: 'center',
-            top: 0,
+            py: 1,
+            minHeight: '68px',
           }}
         >
-          <Typography
-            variant="h6"
-            component="h1"
+          <Box
+            color={theme.palette.tertiary.contrastText}
+            sx={{
+              background: theme.palette.tertiary.main,
+              display: 'flex',
+              flexDirection: 'column',
+              p: 0.5,
+              position: 'absolute',
+              textAlign: 'center',
+              top: 0,
+              boxShadow: 3,
+            }}
           >
-            <Link
-              underline="none"
-              color={COLORS.tertiary.contrastText}
-              to="/"
-              sx={{
-                lineHeight: 1,
-              }}
-            >
-              {SITE_SHORT_NAME}
-              <Box sx={{ m: 'auto' }}>
-                <GiBlackBridge size="3rem" />
-              </Box>
-            </Link>
-          </Typography>
-        </Box>
-        <Navigation
-          sx={{
-            display: hideNavigation ? 'none' : 'inline',
-          }}
-        />
-      </AppBar>
-      <Container
-        component="main"
-        sx={{
-          mt: '4rem',
-        }}
-      >
-        {
-          title && (
             <Typography
-              variant="h1"
-              component="h2"
-              sx={{
-                fontWeight: 500,
-                textTransform: 'capitalize',
-              }}
+              variant="h6"
+              component="h1"
             >
-              {title}
+              <Link
+                underline="none"
+                color={theme.palette.tertiary.contrastText}
+                to="/"
+                sx={{
+                  lineHeight: 1,
+                }}
+              >
+                {SITE_SHORT_NAME}
+                <Box sx={{ m: 'auto' }}>
+                  <GiBlackBridge size="3rem" />
+                </Box>
+              </Link>
             </Typography>
-          )
-        }
-        {children}
-      </Container>
-      <Container
-        component="footer"
-        sx={{
-          mt: '2rem',
-        }}
-      >
-        {FOOTER_COPY}
-      </Container>
-    </Stack>
+          </Box>
+          <Navigation
+            sx={{
+              display: hideNavigation ? 'none' : 'inline',
+            }}
+          />
+        </AppBar>
+        <Container
+          component="main"
+          sx={{
+            mt: '4rem',
+          }}
+        >
+          {
+            title && (
+              <Typography
+                variant="h1"
+                component="h2"
+                sx={{
+                  fontWeight: 500,
+                  textTransform: 'capitalize',
+                }}
+              >
+                {title}
+              </Typography>
+            )
+          }
+          {children}
+        </Container>
+        <Container
+          component="footer"
+          sx={{
+            mt: '2rem',
+          }}
+        >
+          {FOOTER_COPY}
+        </Container>
+      </Stack>
+    </>
   );
 }
 

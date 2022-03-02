@@ -16,6 +16,9 @@ const theme = createTheme({
       contrastText: '#000000',
     },
   },
+  shape: {
+    borderRadius: 0,
+  },
 });
 theme.palette.background.default = theme.palette.secondary.main;
 console.log(theme);

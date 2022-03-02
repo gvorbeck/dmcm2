@@ -83,7 +83,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       component: path.resolve('./src/components/LocationPageLayout/LocationPageLayout.js'),
       context: {
         id: node.id,
-        pid: findParentAdventure(node.fields.slug, 'locations'),
+        // pid: findParentAdventure(node.fields.slug, 'locations'),
       },
     });
   });
