@@ -53,17 +53,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   }
 
   const adventures = result.data.adventures.edges;
-
-  function findParentAdventure(slug, section) {
-    const regex = new RegExp(section);
-    for (let i = 0, l = adventures.length; i < l; i + 1) {
-      if (adventures[i].node.fields.slug === slug.split(regex)[0]) {
-        return adventures[i].node.id;
-      }
-    }
-    return null;
-  }
-
   adventures.forEach(({ node }) => {
     createPage({
       path: node.fields.slug,
@@ -83,7 +72,6 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       component: path.resolve('./src/components/LocationPageLayout/LocationPageLayout.js'),
       context: {
         id: node.id,
-        // pid: findParentAdventure(node.fields.slug, 'locations'),
       },
     });
   });

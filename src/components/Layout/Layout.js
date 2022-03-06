@@ -1,15 +1,16 @@
 import * as React from 'react';
 import {
-  AppBar, Box, Container, Stack, Typography,
+  AppBar, Box, Container, Stack, SvgIcon, Typography,
 } from '@mui/material';
 import { Link } from 'gatsby-theme-material-ui';
 import { Helmet } from 'react-helmet';
-import { GiBlackBridge } from 'react-icons/gi';
+// import { GiBlackBridge } from 'react-icons/gi';
 import { useTheme } from '@mui/styles';
 import {
   SITE_NAME, SITE_SHORT_NAME, FOOTER_COPY,
 } from '../../utils/constants';
 import Navigation from '../Navigation/Navigation';
+import DmcmBlackBridgeIcon from '../../images/black-bridge.svg';
 
 function CustomContainer(props) {
   return <Container component="header" {...props} />;
@@ -57,7 +58,14 @@ function Layout(props) {
               >
                 {SITE_SHORT_NAME}
                 <Box sx={{ m: 'auto' }}>
-                  <GiBlackBridge size="3rem" />
+                  <SvgIcon
+                    sx={{
+                      color: '#000',
+                      fontSize: '3rem',
+                    }}
+                  >
+                    <DmcmBlackBridgeIcon />
+                  </SvgIcon>
                 </Box>
               </Link>
             </Typography>

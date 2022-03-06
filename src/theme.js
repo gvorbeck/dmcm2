@@ -1,18 +1,22 @@
 import { createTheme } from '@mui/material/styles';
+import { brown, lime } from '@mui/material/colors';
 
 // A custom theme for this app
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#86870d',
+      // main: '#86870d',
+      main: lime[900],
     },
     secondary: {
-      main: '#590700',
+      // main: '#590700',
+      main: brown[900],
     },
     tertiary: {
-      light: '#ffe7c5',
-      main: '#d2b594',
-      dark: '#a08566',
+      light: '#efdcd5',
+      // main: '#d2b594',
+      main: brown[200],
+      dark: '#8c7b75',
       contrastText: '#000000',
     },
   },
@@ -21,6 +25,5 @@ const theme = createTheme({
   },
 });
 theme.palette.background.default = theme.palette.secondary.main;
-console.log(theme);
 
 export default theme;

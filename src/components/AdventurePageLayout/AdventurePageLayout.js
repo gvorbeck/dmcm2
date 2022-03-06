@@ -2,7 +2,6 @@ import * as React from 'react';
 import { graphql } from 'gatsby';
 import {
   Box,
-  Link,
   List,
   ListItem,
   Table,
@@ -17,6 +16,7 @@ import {
 } from '@mui/material';
 import { visuallyHidden } from '@mui/utils';
 import { useTheme } from '@mui/styles';
+import { Link } from 'gatsby-theme-material-ui';
 import Layout from '../Layout/Layout';
 import AdventureDetails from '../AdventureDetails/AdventureDetails';
 import { HEADER_CELLS } from '../../utils/constants';
@@ -202,7 +202,15 @@ function AdventurePageLayout(props) {
   const locationListItems = (locations) => {
     const locationMarkup = locations && locations.map((location) => (
       <Typography key={Math.random()} variant="body1" component={ListItem}>
-        <Link href={location.node.frontmatter.slug}>{location.node.frontmatter.title}</Link>
+        <Link
+          to={location.node.fields.slug}
+          state={{
+            parentAdventureSlug: data.mdx.fields.slug,
+            parentAdventureTitle: data.mdx.frontmatter.title,
+          }}
+        >
+          {location.node.frontmatter.title}
+        </Link>
       </Typography>
     ));
     return locationMarkup;

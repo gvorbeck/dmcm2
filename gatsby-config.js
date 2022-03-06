@@ -25,5 +25,13 @@ module.exports = {
       path: './src/content/',
     },
     __key: 'content',
+  },
+  {
+    resolve: 'gatsby-plugin-react-svg',
+    options: {
+      rule: {
+        include: /images/,
+      },
+    },
   }],
 };

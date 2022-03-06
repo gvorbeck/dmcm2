@@ -1,3 +1,10 @@
+import * as React from 'react';
+import {
+  ArrowDownward,
+  ArrowUpward,
+  Info,
+  Map,
+} from '@mui/icons-material';
 // UTILITY: METADATA
 export const SITE_NAME = 'Dungeon Master\'s Campaign Manager';
 export const SITE_SHORT_NAME = 'DMCM';
@@ -79,3 +86,31 @@ export const GREETING = 'Hail fellow well met.';
 export const DESCRIPTION = 'The DMCM is a React-based campaign manager for your favorite 5E TTRPG.';
 // PAGE: ADVENTURES
 export const ADVENTURES = 'Adventures';
+// PAGE: ADVENTURE LOCATION
+export const LOCATION_NAVIGATION = [
+  {
+    name: 'Map',
+    anchor: 'map',
+    icon: <Map />,
+  },
+  {
+    name: 'General Info',
+    anchor: 'general',
+    icon: <Info />,
+  },
+  {
+    name: 'Up',
+    anchor: 'up',
+    icon: <ArrowUpward />,
+  },
+  {
+    name: 'Down',
+    anchor: 'down',
+    icon: <ArrowDownward />,
+  },
+];
+export const GENERAL_INFORMATION = 'General Information';
+export const UNKNOWN_ROOM_FLAG = 'The flag listed in this location\'s frontmatter is unrecognized.';
+// PAGE: REFERENCES
+export const REFERENCE = 'Reference';
+export const TABLE_OF_CONTENTS = 'Table of Contents';
