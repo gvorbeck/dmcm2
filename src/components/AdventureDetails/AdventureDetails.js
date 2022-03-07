@@ -12,23 +12,15 @@ import {
 
 function AdventureStats(props) {
   const { setting, levels, players } = props;
+  const statTitles = [SETTING, LEVELS, PLAYERS];
+  const statIcons = [<PublicIcon />, <SwitchAccessShortcutIcon />, <SupervisedUserCircleIcon />];
   return (
     <Stack>
-      {setting && (
-        <Tooltip title={SETTING}>
-          <Chip icon={<PublicIcon />} label={setting} />
+      {[setting, levels, players].map((stat, index) => (stat ? (
+        <Tooltip key={statTitles[index]} title={statTitles[index]}>
+          <Chip icon={statIcons[index]} label={stat} />
         </Tooltip>
-      )}
-      {levels && (
-        <Tooltip title={LEVELS}>
-          <Chip icon={<SwitchAccessShortcutIcon />} label={levels} />
-        </Tooltip>
-      )}
-      {players && (
-        <Tooltip title={PLAYERS}>
-          <Chip icon={<SupervisedUserCircleIcon />} label={players} />
-        </Tooltip>
-      )}
+      ) : null))}
     </Stack>
   );
 }
@@ -37,9 +29,7 @@ function AdventureDescription(props) {
   const { body } = props;
   return (
     <Box>
-      <MDXRenderer>
-        {body}
-      </MDXRenderer>
+      <MDXRenderer>{body}</MDXRenderer>
     </Box>
   );
 }
