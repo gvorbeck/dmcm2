@@ -1,9 +1,34 @@
 import * as React from 'react';
 import { graphql, navigate } from 'gatsby';
-import { Box, ButtonGroup } from '@mui/material';
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
+import {
+  Alert,
+  Box,
+  ButtonGroup,
+  Card,
+  Divider,
+  List,
+  ListItem,
+  Paper,
+  Stack,
+  SvgIcon,
+  Tooltip,
+  Typography,
+} from '@mui/material';
+import { MDXRenderer } from 'gatsby-plugin-mdx';
 import { Link, Button } from 'gatsby-theme-material-ui';
+import MarkdownView from 'react-showdown';
 import Layout from '../Layout/Layout';
-import { LOCATION_NAVIGATION } from '../../utils/constants';
+import DmcmSpeedDialIcon from '../../images/read.svg';
+import DmcmPersonIcon from '../../images/person.svg';
+import DmcmEvilMinionIcon from '../../images/evil-minion.svg';
+import DmcmSecretDoorIcon from '../../images/secret-door.svg';
+import DmcmSixEyesIcon from '../../images/six-eyes.svg';
+import DmcmTreasureChestIcon from '../../images/open-treasure-chest.svg';
+import DmcmTrapIcon from '../../images/wolf-trap.svg';
+import DmcmBullyMinionIcon from '../../images/bully-minion.svg';
+import DmcmDiceRandomIcon from '../../images/perspective-dice-six-faces-random.svg';
+import { LOCATION_NAVIGATION, UNKNOWN_ROOM_FLAG } from '../../utils/constants';
 
 function AdventureBreadcrumb(props) {
   const { parentAdventureSlug, parentAdventureTitle } = props;
@@ -15,19 +40,52 @@ function AdventureBreadcrumb(props) {
 }
 
 function LocationNavigation(props) {
-  const { location, parentAdventureSlug, parentAdventureTitle } = props;
-  console.log(props);
+  const { parentAdventureSlug, parentAdventureTitle, currentLocation } = props;
+  const navigator = (anchor) => {
+    if (anchor === 'up' || anchor === 'down') {
+      if (currentLocation === '#map') {
+        if (anchor === 'down') {
+          return '#general';
+        }
+      }
+      if (currentLocation === '#general') {
+        if (anchor === 'up') {
+          return '#map';
+        }
+        if (anchor === 'down') {
+          return '#1';
+        }
+      }
+      if (currentLocation === '#1') {
+        if (anchor === 'up') {
+          return '#general';
+        }
+        if (anchor === 'down') {
+          return '#2';
+        }
+      }
+      if (currentLocation === '') {
+        return '#1';
+      }
+      if (anchor === 'up') {
+        return (`#${parseInt(currentLocation.substring(1), 10) - 1}`);
+      }
+      if (anchor === 'down') {
+        return (`#${parseInt(currentLocation.substring(1), 10) + 1}`);
+      }
+    }
+    return `#${anchor}`;
+  };
   return (
-    <Box>
+    // Temporary styles
+    <Box sx={{ position: 'sticky', top: 0, zIndex: 1 }}>
       <ButtonGroup variant="contained" aria-label="Location navigation">
         {LOCATION_NAVIGATION.map((item) => (
           <Button
             key={item.name}
             anchor={item.anchor}
             onClick={(event) => {
-              console.log(event.currentTarget.attributes.anchor.value);
-              console.log(location);
-              navigate(`#${event.currentTarget.attributes.anchor.value}`, {
+              navigate(navigator(event.currentTarget.attributes.anchor.value), {
                 state: {
                   parentAdventureSlug,
                   parentAdventureTitle,
@@ -44,27 +102,244 @@ function LocationNavigation(props) {
 }
 
 function LocationMap(props) {
-  console.log(props);
+  const {
+    areas, image, map, title,
+  } = props;
+
+  const overlayFrame = (map && map.image && map.width && map.height && map.padding)
+    ? {
+      // From Location file's frontmatter.
+      p: map.padding,
+      gridTemplateColumns: `repeat(${map.width}, 1fr)`,
+      gridTemplateRows: `repeat(${map.height}, 1fr)`,
+      // Positioning Area List over the Map Image.
+      // position: 'absolute',
+      // top: 0,
+      // left: 0,
+      // width: '100%',
+      // height: '100%',
+      // display: 'grid',
+    }
+    : null;
+
+  const mapListTrapItems = areas.map((area) => {
+    if (area.traps) {
+      return area.traps.map((trap) => {
+        const coordinates = {
+          griedColumnStart: trap.x,
+          gridColumnEnd: trap.x + trap.w,
+          gridRowStart: trap.y,
+          gridRowEnd: trap.y + trap.h,
+        };
+        return (
+          <LocationMapTrapItem
+            key={((trap.x % trap.y) * trap.w) % (trap.h)}
+            trap={trap}
+            coordinates={coordinates}
+          />
+        );
+      });
+    }
+    return null;
+  });
+
+  const mapListAreaItems = areas.map((area, index) => {
+    const coordinates = {
+      gridColumnStart: area.x,
+      gridRowStart: area.y,
+      p: 0,
+      display: 'block',
+    };
+    return (
+      <LocationMapAreaItem key={`${area.name}-${Math.random()}`} area={area} coordinates={coordinates} index={index} />
+    );
+  });
+
   return (
-    <Box id="map" />
+    <Box id="map">
+      <GatsbyImage
+        image={image}
+        loading="eager"
+        alt={`Map of ${title}`}
+      />
+      <LocationMapOverlay
+        overlayFrame={overlayFrame}
+        mapListTrapItems={mapListTrapItems}
+        mapListAreaItems={mapListAreaItems}
+      />
+    </Box>
   );
 }
+
+function LocationMapTrapItem(props) {
+  const { trap, coordinates } = props;
+  return (
+    <ListItem
+      sx={coordinates}
+      className="dmcm-ListItem-trap"
+    />
+  );
+}
+
+function LocationMapAreaItem(props) {
+  const { area, coordinates, index } = props;
+  return (
+    <ListItem
+      sx={coordinates}
+    >
+      <Button
+        onClick={(event) => {
+          console.log(event);
+          // THIS WILL WORK LATER. COPY OF LOCATION NAV BEHAVIOR.
+          // navigate(`#${event.currentTarget.attributes.anchor.value}`, {
+          //   state: {
+          //     parentAdventureSlug,
+          //     parentAdventureTitle,
+          //   },
+          // });
+        }}
+      >
+        {index + 1}
+      </Button>
+      <LocationMapAreaItemCard index={index} title={area.name} flags={area.flags} />
+    </ListItem>
+  );
+}
+
+function LocationMapAreaItemCard(props) {
+  const { title, flags } = props;
+  const flagIcons = {
+    person: {
+      icon: <DmcmPersonIcon />,
+      title: 'A person of interest is here.',
+    },
+    monster: {
+      icon: <DmcmEvilMinionIcon />,
+      title: 'Monster(s) present here.',
+    },
+    secret: {
+      icon: <DmcmSecretDoorIcon />,
+      title: 'There are hidden passages or items here.',
+    },
+    eyes: {
+      icon: <DmcmSixEyesIcon />,
+      title: 'Players can/are being observed here.',
+    },
+    treasure: {
+      icon: <DmcmTreasureChestIcon />,
+      title: 'There is loot here.',
+    },
+    trap: {
+      icon: <DmcmTrapIcon />,
+      title: 'There is a trap here.',
+    },
+    boss: {
+      icon: <DmcmBullyMinionIcon />,
+      title: 'A boss level monster is here.',
+    },
+  };
+
+  return (
+    <Card>
+      <Typography variant="h5">{title}</Typography>
+      <Divider />
+      <Stack>
+        {flags && flags.map((flag) => (
+          <Tooltip
+            key={flagIcons[flag] ? flagIcons[flag].title : Math.random()}
+            title={flagIcons[flag] ? flagIcons[flag].title : UNKNOWN_ROOM_FLAG}
+          >
+            <SvgIcon>
+              {flagIcons[flag] ? flagIcons[flag].icon : <DmcmDiceRandomIcon />}
+            </SvgIcon>
+          </Tooltip>
+        ))}
+      </Stack>
+    </Card>
+  );
+}
+
 function LocationMapOverlay(props) {
-  console.log(props);
+  const { overlayFrame, mapListTrapItems, mapListAreaItems } = props;
   return (
-    <Box />
+    <Box>
+      <List sx={overlayFrame}>
+        {mapListAreaItems}
+        {mapListTrapItems}
+      </List>
+    </Box>
   );
 }
+
 function GeneralFeatures(props) {
-  console.log(props);
+  const { markdown } = props;
   return (
-    <Box id="general" />
+    <Box id="general">
+      <Paper>
+        <Typography variant="h4">General Information</Typography>
+        <Divider />
+        <MDXRenderer>
+          {markdown}
+        </MDXRenderer>
+      </Paper>
+    </Box>
   );
 }
+
 function LocationAreaList(props) {
-  console.log(props);
+  const { areas } = props;
   return (
-    <Box />
+    <Box>
+      <List component="ol">
+        {areas.map((area, index) => <LocationAreaListItem key={`${area.name}-${area.x + area.y}`} index={index} area={area} />)}
+      </List>
+    </Box>
+  );
+}
+
+function LocationAreaListItem(props) {
+  const { area, index } = props;
+  // console.log(area);
+  return (
+    <ListItem id={index + 1}>
+      <Paper>
+        <Box component="article">
+          <Box component="header">
+            <Typography variant="h1">{area.name}</Typography>
+          </Box>
+          <Box>
+            {area.flavor && (
+              <Alert
+                severity="info"
+                icon={<DmcmTreasureChestIcon width="50px" />}
+              >
+                <Typography variant="subtitle1" component="div">
+                  <MarkdownView markdown={area.flavor} />
+                </Typography>
+              </Alert>
+            )}
+            {area.callout && (
+              <Alert
+                severity="warning"
+                icon={<DmcmSpeedDialIcon width="50px" />}
+                sx={[
+                  {
+                    '.dmcm-Paper-root + &': {
+                      mt: '1rem',
+                    },
+                  },
+                ]}
+              >
+                <Typography variant="subtitle1" component="div">
+                  <MarkdownView markdown={area.callout} />
+                </Typography>
+              </Alert>
+            )}
+            {area.content && <MarkdownView markdown={area.content} />}
+          </Box>
+        </Box>
+      </Paper>
+    </ListItem>
   );
 }
 
@@ -72,23 +347,32 @@ function LocationPageLayout(props) {
   const { data, location } = props;
   const parentAdventureTitle = location.state ? location.state.parentAdventureTitle : '';
   const parentAdventureSlug = location.state ? location.state.parentAdventureSlug : '';
+  console.log(data);
   return (
+    // Temporary styles
     <Layout title={data.mdx.frontmatter.title}>
       {parentAdventureTitle && (
-        <AdventureBreadcrumb
-          parentAdventureSlug={parentAdventureSlug}
-          parentAdventureTitle={parentAdventureTitle}
-        />
+        <Box sx={{ position: 'relative' }}>
+          <AdventureBreadcrumb
+            parentAdventureSlug={parentAdventureSlug}
+            parentAdventureTitle={parentAdventureTitle}
+          />
+        </Box>
       )}
       <LocationNavigation
         parentAdventureSlug={parentAdventureSlug}
         parentAdventureTitle={parentAdventureTitle}
-        location={location}
+        currentLocation={location.hash}
+        locationMax={data.mdx.frontmatter.areas.length}
       />
-      <LocationMap />
-      <LocationMapOverlay />
-      <GeneralFeatures />
-      <LocationAreaList />
+      <LocationMap
+        image={getImage(data.mdx.frontmatter.map.image)}
+        map={data.mdx.frontmatter.map}
+        title={data.mdx.frontmatter.title}
+        areas={data.mdx.frontmatter.areas}
+      />
+      <GeneralFeatures markdown={data.mdx.body} />
+      <LocationAreaList areas={data.mdx.frontmatter.areas} />
     </Layout>
   );
 }

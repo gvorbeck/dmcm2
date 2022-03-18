@@ -1,107 +1,113 @@
-import * as React from 'react';
+import React from 'react';
 import {
   AppBar, Box, Container, Stack, SvgIcon, Typography,
 } from '@mui/material';
 import { Link } from 'gatsby-theme-material-ui';
 import { Helmet } from 'react-helmet';
-// import { GiBlackBridge } from 'react-icons/gi';
-import { useTheme } from '@mui/styles';
+// import { useTheme } from '@mui/styles';
 import {
   SITE_NAME, SITE_SHORT_NAME, FOOTER_COPY,
 } from '../../utils/constants';
 import Navigation from '../Navigation/Navigation';
 import DmcmBlackBridgeIcon from '../../images/black-bridge.svg';
 
-function CustomContainer(props) {
-  return <Container component="header" {...props} />;
-}
+// const dmcmTheme = () => useTheme();
+// eslint-disable-next-line react/function-component-definition
+const HeaderContainer = (props) => <Container component="header" {...props} />;
 
-function Layout(props) {
-  const { children, hideNavigation, title } = props;
-  const theme = useTheme();
+function Layout({
+  children, hideNavigation, title, navDirection,
+}) {
   return (
     <>
       <Helmet defaultTitle="DMCM" title={`${title} | ${SITE_NAME}`} />
-      <Stack color={theme.palette.tertiary.main}>
+      <Stack
+        sx={{
+          typography: 'body1',
+          color: 'secondary.main',
+          // Add universal styles here.
+          // <code/> styles
+          '& code': {
+            backgroundColor: 'background.paper',
+            padding: 0.5,
+          },
+          // Table header row styles
+          '& thead tr': {
+            backgroundColor: 'primary.main',
+          },
+        }}
+      >
         <AppBar
-          component={CustomContainer}
-          position="relative"
+          component={HeaderContainer}
           sx={{
-            py: 1,
-            minHeight: '68px',
+            backgroundColor: 'primary.main',
+            minHeight: '4.25rem',
+            left: 0,
           }}
         >
           <Box
-            color={theme.palette.tertiary.contrastText}
             sx={{
-              background: theme.palette.tertiary.main,
-              display: 'flex',
-              flexDirection: 'column',
-              p: 0.5,
+              backgroundColor: 'secondary.main',
+              boxShadow: 2,
               position: 'absolute',
-              textAlign: 'center',
-              top: 0,
-              boxShadow: 3,
             }}
           >
             <Typography
-              variant="h6"
-              component="h1"
+              variant="h1"
+              sx={{
+                fontSize: '1.5rem',
+                fontWeight: 700,
+              }}
             >
               <Link
                 underline="none"
-                color={theme.palette.tertiary.contrastText}
                 to="/"
                 sx={{
                   lineHeight: 1,
+                  color: '#000',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  padding: '1.25rem 0.5rem 0.5rem',
                 }}
               >
                 {SITE_SHORT_NAME}
-                <Box sx={{ m: 'auto' }}>
-                  <SvgIcon
-                    sx={{
-                      color: '#000',
-                      fontSize: '3rem',
-                    }}
-                  >
-                    <DmcmBlackBridgeIcon />
-                  </SvgIcon>
-                </Box>
+                <SvgIcon
+                  sx={{
+                    paddingTop: '0.5rem',
+                    fontSize: '4rem',
+                  }}
+                >
+                  <DmcmBlackBridgeIcon />
+                </SvgIcon>
               </Link>
             </Typography>
           </Box>
-          <Navigation
-            sx={{
-              display: hideNavigation ? 'none' : 'inline',
-            }}
-          />
+          <Navigation hideNavigation={hideNavigation} navDirection={navDirection} />
         </AppBar>
         <Container
           component="main"
           sx={{
-            mt: '4rem',
+            marginTop: '8rem',
           }}
         >
-          {
-            title && (
-              <Typography
-                variant="h1"
-                component="h2"
-                sx={{
-                  fontWeight: 500,
-                  textTransform: 'capitalize',
-                }}
-              >
-                {title}
-              </Typography>
-            )
-          }
+          {title && title !== 'Home' && (
+            <Typography
+              variant="h2"
+              sx={{
+                fontWeight: 500,
+                textTransform: 'capitalize',
+              }}
+            >
+              {title}
+            </Typography>
+          )}
           {children}
         </Container>
         <Container
           component="footer"
           sx={{
-            mt: '2rem',
+            marginTop: '2rem',
           }}
         >
           {FOOTER_COPY}

@@ -3,7 +3,7 @@ module.exports = {
     title: 'Dungeon Master\'s Compaign Manager',
     siteUrl: 'https://www.yourdomain.tld',
   },
-  plugins: ['gatsby-plugin-image', 'gatsby-plugin-react-helmet', 'gatsby-plugin-mdx', 'gatsby-plugin-sharp', 'gatsby-transformer-sharp', {
+  plugins: ['gatsby-plugin-image', 'gatsby-plugin-react-helmet', 'gatsby-plugin-mdx', 'gatsby-plugin-sharp', 'gatsby-transformer-sharp', 'gatsby-plugin-sass', {
     resolve: 'gatsby-source-filesystem',
     options: {
       name: 'images',

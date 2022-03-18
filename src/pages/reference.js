@@ -153,7 +153,7 @@ function ReferenceArticlesCategoryBlockItemDl(props) {
     <Box>
       <Box component="dl">
         {content.terms.map((term) => (
-          <Box sx={{ typography: 'body1' }}>
+          <Box key={term.dt} sx={{ typography: 'body1' }}>
             <Typography variant="h5" component="dt">{term.dt}</Typography>
             <Box component="dd">
               {term.dd.short && <Typography variant="subtitle1" component="p">{term.dd.short}</Typography>}

@@ -1,53 +1,50 @@
-import * as React from 'react';
-import { Box, Typography } from '@mui/material';
-import Layout from '../components/Layout/Layout';
+import React from 'react';
+import { Box, Paper, Typography } from '@mui/material';
 import Navigation from '../components/Navigation/Navigation';
+import Layout from '../components/Layout/Layout';
 import { GREETING, DESCRIPTION } from '../utils/constants';
 
-function IndexPage(props) {
-  console.log(props);
+function IndexPage() {
   return (
-    <Layout hideNavigation>
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gridTemplateRows: 'repeat(2, auto)',
-          gridColumnGap: '2rem',
-        }}
-      >
-        <Typography
-          variant="h1"
-          component="h2"
+    <Layout title="Home" hideNavigation>
+      <Box>
+        <Paper
           sx={{
-            fontWeight: 500,
-            gridColumn: '1 / 3',
+            color: 'secondary.main',
+            display: 'grid',
+            padding: '0.5rem',
+            gridTemplate: 'repeat(3, auto) / repeat(2, auto)',
           }}
         >
-          {GREETING}
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{
-            gridColumn: '1 / 3',
-            gridRow: '2 / 3',
-            mt: 2,
-            borderTop: '1px solid',
-            pt: '1rem',
-          }}
-        >
-          {DESCRIPTION}
-        </Typography>
-        <Navigation
-          btnColor="tertiary"
-          homeNav
-          sx={{
-            gridColumn: '3 / 4',
-            gridRow: '1 / 3',
-            justifyContent: 'space-between',
-            height: '100%',
-          }}
-        />
+          <Typography
+            variant="h2"
+            sx={{
+              gridColumn: '1 / 2',
+              gridRow: '1 / 2',
+            }}
+          >
+            {GREETING}
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              borderTop: '1px solid',
+              paddingTop: '1rem',
+              gridColumn: '1 / 2',
+              gridRow: '3 / 4',
+            }}
+          >
+            {DESCRIPTION}
+          </Typography>
+          <Navigation
+            homeNav
+            size="large"
+            navDirection="column"
+            sx={{
+              gridRow: '1 / 4',
+            }}
+          />
+        </Paper>
       </Box>
     </Layout>
   );
