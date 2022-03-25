@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import * as React from 'react';
+import React from 'react';
 import { unstable_ClassNameGenerator as ClassNameGenerator } from '@mui/material/utils';
 import TopLayout from './src/components/TopLayout/TopLayout';
 

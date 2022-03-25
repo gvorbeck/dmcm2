@@ -24,14 +24,11 @@ import { visuallyHidden } from '@mui/utils';
 import FeedIcon from '@mui/icons-material/Feed';
 import Layout from '../Layout/Layout';
 import AdventureDetails from '../AdventureDetails/AdventureDetails';
-import { NPCS, HEADER_CELLS, LOCATIONS } from '../../utils/constants';
+import {
+  NPCS, HEADER_CELLS, LOCATIONS, BLOCK_HEADER_STYLES,
+} from '../../utils/constants';
 
 // const dmcmTheme = () => useTheme();
-const boxHeaderStyles = {
-  backgroundColor: 'primary.main',
-  padding: 1,
-  color: 'secondary.light',
-};
 
 function NpcTable({ npcs, headers }) {
   const [order, setOrder] = React.useState('asc');
@@ -83,7 +80,7 @@ function NpcTable({ npcs, headers }) {
       >
         <Typography
           variant="h3"
-          sx={boxHeaderStyles}
+          sx={BLOCK_HEADER_STYLES}
         >
           {NPCS}
           <Divider />
@@ -189,7 +186,11 @@ function NpcTableBody({
                         query: cell,
                       }}
                     >
-                      <FeedIcon />
+                      <FeedIcon
+                        sx={{
+                          color: 'common.white',
+                        }}
+                      />
                     </Link>
                   </TableCell>
                 );
@@ -228,21 +229,29 @@ function Locations({ locations, parentAdventureSlug, parentAdventureTitle }) {
       >
         <Typography
           variant="h3"
-          sx={boxHeaderStyles}
+          sx={BLOCK_HEADER_STYLES}
         >
           {LOCATIONS}
         </Typography>
         <Divider />
-        <List>
+        <List
+          sx={{
+            padding: 0,
+          }}
+        >
           {locations.map((location) => (
             <ListItem disablePadding key={location.node.frontmatter.title}>
               <Link
+                component={ListItemButton}
+                underline="none"
                 to={location.node.fields.slug}
                 state={{
                   parentAdventureSlug,
                   parentAdventureTitle,
                 }}
-                component={ListItemButton}
+                sx={{
+                  color: 'primary.light',
+                }}
               >
                 <ListItemText primary={location.node.frontmatter.title} />
               </Link>

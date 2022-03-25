@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { graphql, navigate } from 'gatsby';
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import {
@@ -28,19 +28,19 @@ import DmcmTreasureChestIcon from '../../images/open-treasure-chest.svg';
 import DmcmTrapIcon from '../../images/wolf-trap.svg';
 import DmcmBullyMinionIcon from '../../images/bully-minion.svg';
 import DmcmDiceRandomIcon from '../../images/perspective-dice-six-faces-random.svg';
-import { LOCATION_NAVIGATION, UNKNOWN_ROOM_FLAG } from '../../utils/constants';
+import {
+  LOCATION_NAVIGATION, UNKNOWN_ROOM_FLAG, GENERAL_INFORMATION, SCROLL_MARGIN_TOP,
+} from '../../utils/constants';
 
-function AdventureBreadcrumb(props) {
-  const { parentAdventureSlug, parentAdventureTitle } = props;
+function AdventureBreadcrumb({ parentAdventureSlug, parentAdventureTitle }) {
   return (
     <Box>
-      <Link sx={{ typography: 'subtitle1' }} to={parentAdventureSlug}>{parentAdventureTitle}</Link>
+      <Link sx={{ typography: 'subtitle1', color: 'primary.light' }} to={parentAdventureSlug}>{parentAdventureTitle}</Link>
     </Box>
   );
 }
 
-function LocationNavigation(props) {
-  const { parentAdventureSlug, parentAdventureTitle, currentLocation } = props;
+function LocationNavigation({ parentAdventureSlug, parentAdventureTitle, currentLocation }) {
   const navigator = (anchor) => {
     if (anchor === 'up' || anchor === 'down') {
       if (currentLocation === '#map') {
@@ -78,7 +78,14 @@ function LocationNavigation(props) {
   };
   return (
     // Temporary styles
-    <Box sx={{ position: 'sticky', top: 0, zIndex: 1 }}>
+    <Box
+      sx={{
+        position: 'sticky',
+        top: '5rem',
+        zIndex: 9999,
+        paddingLeft: '6.25rem',
+      }}
+    >
       <ButtonGroup variant="contained" aria-label="Location navigation">
         {LOCATION_NAVIGATION.map((item) => (
           <Button
@@ -101,24 +108,22 @@ function LocationNavigation(props) {
   );
 }
 
-function LocationMap(props) {
-  const {
-    areas, image, map, title,
-  } = props;
-
+function LocationMap({
+  areas, image, map, title,
+}) {
   const overlayFrame = (map && map.image && map.width && map.height && map.padding)
     ? {
       // From Location file's frontmatter.
-      p: map.padding,
+      padding: map.padding,
+      display: 'grid',
       gridTemplateColumns: `repeat(${map.width}, 1fr)`,
       gridTemplateRows: `repeat(${map.height}, 1fr)`,
       // Positioning Area List over the Map Image.
-      // position: 'absolute',
-      // top: 0,
-      // left: 0,
-      // width: '100%',
-      // height: '100%',
-      // display: 'grid',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
     }
     : null;
 
@@ -147,8 +152,9 @@ function LocationMap(props) {
     const coordinates = {
       gridColumnStart: area.x,
       gridRowStart: area.y,
-      p: 0,
+      padding: 0,
       display: 'block',
+      position: 'relative',
     };
     return (
       <LocationMapAreaItem key={`${area.name}-${Math.random()}`} area={area} coordinates={coordinates} index={index} />
@@ -156,7 +162,14 @@ function LocationMap(props) {
   });
 
   return (
-    <Box id="map">
+    <Box
+      id="map"
+      sx={{
+        scrollMarginTop: SCROLL_MARGIN_TOP,
+        marginTop: 1,
+        position: 'relative',
+      }}
+    >
       <GatsbyImage
         image={image}
         loading="eager"
@@ -171,8 +184,7 @@ function LocationMap(props) {
   );
 }
 
-function LocationMapTrapItem(props) {
-  const { trap, coordinates } = props;
+function LocationMapTrapItem({ trap, coordinates }) {
   return (
     <ListItem
       sx={coordinates}
@@ -181,13 +193,15 @@ function LocationMapTrapItem(props) {
   );
 }
 
-function LocationMapAreaItem(props) {
-  const { area, coordinates, index } = props;
+function LocationMapAreaItem({ area, coordinates, index }) {
   return (
     <ListItem
       sx={coordinates}
     >
       <Button
+        size="small"
+        color="primary"
+        variant="contained"
         onClick={(event) => {
           console.log(event);
           // THIS WILL WORK LATER. COPY OF LOCATION NAV BEHAVIOR.
@@ -198,6 +212,13 @@ function LocationMapAreaItem(props) {
           //   },
           // });
         }}
+        sx={{
+          padding: 0.25,
+          minWidth: 'auto',
+          lineHeight: 1,
+          width: '100%',
+          boxShadow: 5,
+        }}
       >
         {index + 1}
       </Button>
@@ -206,8 +227,7 @@ function LocationMapAreaItem(props) {
   );
 }
 
-function LocationMapAreaItemCard(props) {
-  const { title, flags } = props;
+function LocationMapAreaItemCard({ title, flags }) {
   const flagIcons = {
     person: {
       icon: <DmcmPersonIcon />,
@@ -240,7 +260,12 @@ function LocationMapAreaItemCard(props) {
   };
 
   return (
-    <Card>
+    <Card
+      sx={{
+        position: 'absolute',
+        display: 'none',
+      }}
+    >
       <Typography variant="h5">{title}</Typography>
       <Divider />
       <Stack>
@@ -259,24 +284,27 @@ function LocationMapAreaItemCard(props) {
   );
 }
 
-function LocationMapOverlay(props) {
-  const { overlayFrame, mapListTrapItems, mapListAreaItems } = props;
+function LocationMapOverlay({ overlayFrame, mapListTrapItems, mapListAreaItems }) {
   return (
-    <Box>
-      <List sx={overlayFrame}>
-        {mapListAreaItems}
-        {mapListTrapItems}
-      </List>
-    </Box>
+    <List
+      sx={overlayFrame}
+    >
+      {mapListAreaItems}
+      {mapListTrapItems}
+    </List>
   );
 }
 
-function GeneralFeatures(props) {
-  const { markdown } = props;
+function GeneralFeatures({ markdown }) {
   return (
-    <Box id="general">
+    <Box
+      id="general"
+      sx={{
+        scrollMarginTop: SCROLL_MARGIN_TOP,
+      }}
+    >
       <Paper>
-        <Typography variant="h4">General Information</Typography>
+        <Typography variant="h4">{GENERAL_INFORMATION}</Typography>
         <Divider />
         <MDXRenderer>
           {markdown}
@@ -286,8 +314,7 @@ function GeneralFeatures(props) {
   );
 }
 
-function LocationAreaList(props) {
-  const { areas } = props;
+function LocationAreaList({ areas }) {
   return (
     <Box>
       <List component="ol">
@@ -297,9 +324,7 @@ function LocationAreaList(props) {
   );
 }
 
-function LocationAreaListItem(props) {
-  const { area, index } = props;
-  // console.log(area);
+function LocationAreaListItem({ area, index }) {
   return (
     <ListItem id={index + 1}>
       <Paper>
@@ -343,11 +368,9 @@ function LocationAreaListItem(props) {
   );
 }
 
-function LocationPageLayout(props) {
-  const { data, location } = props;
+function LocationPageLayout({ data, location }) {
   const parentAdventureTitle = location.state ? location.state.parentAdventureTitle : '';
   const parentAdventureSlug = location.state ? location.state.parentAdventureSlug : '';
-  console.log(data);
   return (
     // Temporary styles
     <Layout title={data.mdx.frontmatter.title}>

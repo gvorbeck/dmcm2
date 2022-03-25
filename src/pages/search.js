@@ -21,6 +21,7 @@ import {
   ListItem,
   ListItemText,
   Paper,
+  SvgIcon,
   TextField,
   Typography,
 } from '@mui/material';
@@ -70,30 +71,49 @@ function SearchForm({
 
 function SearchResults({ value, category }) {
   return (
-    <Box>
-      <Paper>
-        <List>
-          {value.map((item) => (
-            <SearchResultsItem key={item.name} item={item} category={category} />
-          ))}
-        </List>
-      </Paper>
+    <Box
+      sx={{
+        marginTop: 2,
+      }}
+    >
+      <List
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 50%)',
+          gap: 2,
+        }}
+      >
+        {value.map((item) => (
+          <SearchResultsItem key={item.name} item={item} category={category} />
+        ))}
+      </List>
     </Box>
   );
 }
 
 function SearchResultsItem({ category, item }) {
   return (
-    <ListItem>
+    <ListItem
+      sx={{
+        padding: 0,
+        display: 'block',
+      }}
+    >
       <Box component="article">
-        <SearchResultsItemHeader category={category} item={item} />
-        <SearchResultsItemContent category={category} item={item} />
+        <Paper
+          sx={{
+            px: 2,
+            py: 1,
+          }}
+        >
+          <SearchResultsItemHeader category={category} item={item} />
+          <SearchResultsItemContent category={category} item={item} />
+        </Paper>
       </Box>
     </ListItem>
   );
 }
 function SearchResultsItemHeader({ category, item }) {
-  const title = <Typography variant="h1">{item.name}</Typography>;
   let Avatar;
   let subtitle;
   if (category === 'monsters') {
@@ -112,10 +132,39 @@ function SearchResultsItemHeader({ category, item }) {
     subtitle = `${item.level}  ${item.school}  ${item.ritual}`;
   }
   return (
-    <Box component="header">
-      <Avatar />
-      {title}
-      <Typography variant="h2">{subtitle}</Typography>
+    <Box
+      component="header"
+      sx={{
+        position: 'relative',
+      }}
+    >
+      <SvgIcon
+        component={Avatar}
+        inheritViewBox
+        sx={{
+          width: 48,
+          height: 48,
+          position: 'absolute',
+          right: 0,
+          top: 0,
+        }}
+      />
+      <Typography
+        variant="h2"
+        component="h1"
+        sx={{
+          fontWeight: 700,
+          letterSpacing: '3px',
+        }}
+      >
+        {item.name}
+      </Typography>
+      <Typography
+        variant="h5"
+        component="h2"
+      >
+        {subtitle}
+      </Typography>
       <Divider />
     </Box>
   );
@@ -124,7 +173,11 @@ function SearchResultsItemHeader({ category, item }) {
 function SearchResultsItemContent({ category, item }) {
   const content = category === 'monsters' ? <SearchResultItemContentMonster monster={item} /> : <SearchResultItemContentSpell spell={item} />;
   return (
-    <Box>
+    <Box
+      sx={{
+        marginTop: 4,
+      }}
+    >
       {content}
     </Box>
   );
@@ -160,17 +213,54 @@ function SearchResultItemContentMonster({ monster }) {
 
 function MonsterAbilityList({ abilities }) {
   return (
-    <ButtonGroup>
-      {Object.keys(abilities).map((ability) => (
-        <Button
-          key={ability}
-          modifier={Math.floor((abilities[ability] - 10) / 2)}
-        >
-          {abilities[ability]}
-          {Math.floor((abilities[ability] - 10) / 2)}
-          {ability}
-        </Button>
-      ))}
+    <ButtonGroup
+      sx={{
+        width: '100%',
+        justifyContent: 'center',
+      }}
+    >
+      {Object.keys(abilities).map((ability) => {
+        const modifier = Math.floor((abilities[ability] - 10) / 2);
+        return (
+          <Button
+            key={ability}
+            modifier={Math.floor((abilities[ability] - 10) / 2)}
+            sx={{
+              '& span': {
+                display: 'block',
+                lineHeight: 1,
+              },
+              display: 'flex !important',
+              flexDirection: 'column',
+              flex: '1 1 0',
+            }}
+          >
+            <Box
+              component="span"
+              sx={{
+                typography: 'h4',
+              }}
+            >
+              {abilities[ability]}
+            </Box>
+            <Box
+              sx={{
+                my: 0.5,
+                lineHeight: 1,
+              }}
+            >
+              {modifier > 0 ? `+${modifier}` : modifier}
+            </Box>
+            <Box
+              sx={{
+                fontWeight: 700,
+              }}
+            >
+              {ability}
+            </Box>
+          </Button>
+        );
+      })}
     </ButtonGroup>
   );
 }

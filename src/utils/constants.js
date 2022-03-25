@@ -5,12 +5,10 @@ import {
   Info,
   Map,
 } from '@mui/icons-material';
-// UTILITY: METADATA
+
 export const SITE_NAME = 'Dungeon Master\'s Campaign Manager';
 export const SITE_SHORT_NAME = 'DMCM';
-// COMPONENT: LAYOUT
 export const FOOTER_COPY = `${SITE_NAME} © ${new Date().getFullYear()} J. Garrett Vorbeck`;
-// COMPONENT: NAVIGATION
 export const NAVIGATION_DATA = [
   {
     title: 'adventures',
@@ -29,11 +27,9 @@ export const NAVIGATION_DATA = [
     slug: '/search/?category=spells',
   },
 ];
-// COMPONENT: ADVENTURE-DETAILS
 export const SETTING = 'Setting';
 export const PLAYERS = 'Players';
 export const LEVELS = 'Levels';
-// COMPONENT: NPC-TABLE
 export const HEADER_CELLS = [
   {
     id: 'name',
@@ -81,15 +77,11 @@ export const HEADER_CELLS = [
     label: 'Voice',
   },
 ];
-// PAGE: INDEX
 export const GREETING = 'Hail fellow well met.';
 export const DESCRIPTION = 'The DMCM is a React-based campaign manager for your favorite 5E TTRPG.';
-// PAGE: ADVENTURES
 export const ADVENTURES = 'Adventures';
-// PAGE: ADVENTURE LANDING PAGE
 export const NPCS = 'NPCs';
 export const LOCATIONS = 'Locations';
-// PAGE: ADVENTURE LOCATION
 export const LOCATION_NAVIGATION = [
   {
     name: 'Map',
@@ -114,10 +106,8 @@ export const LOCATION_NAVIGATION = [
 ];
 export const GENERAL_INFORMATION = 'General Information';
 export const UNKNOWN_ROOM_FLAG = 'The flag listed in this location\'s frontmatter is unrecognized.';
-// PAGE: REFERENCES
 export const REFERENCE = 'Reference';
 export const TABLE_OF_CONTENTS = 'Table of Contents';
-// PAGE: SEARCH
 export const BESTIARY = 'Bestiary';
 export const SPELLBOOK = 'Spellbook';
 export const UNKNOWN_SEARCH_TYPE = 'category url param missing';
@@ -126,3 +116,9 @@ export const STRING_STAT_NAMES = ['Speed', 'Saving Throws', 'Skills'];
 export const SIMPLE_STAT_NAMES = ['Damage Vulnerabilities', 'Damage Resistances', 'Damage Immunities', 'Condition Immunities', 'Senses', 'Languages', 'Challenge'];
 export const INFO_STAT_NAMES = ['Traits', 'Actions', 'Reactions', 'Legendary Actions'];
 export const SPELL_STAT_NAMES = ['Casting Time', 'Range', 'Components', 'Duration', 'Attack/Save', 'Damage'];
+export const SCROLL_MARGIN_TOP = '8rem';
+export const BLOCK_HEADER_STYLES = {
+  backgroundColor: 'primary.main',
+  padding: 1,
+  color: 'common.white',
+};
