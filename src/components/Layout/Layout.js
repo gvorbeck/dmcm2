@@ -18,6 +18,19 @@ const HeaderContainer = (props) => <Container component="header" {...props} />;
 function Layout({
   children, hideNavigation, title, navDirection,
 }) {
+  console.log(`
+     _____        ___          ___          ___     
+    /  /::\\      /__/\\        /  /\\        /__/\\    
+   /  /:/\\:\\    |  |::\\      /  /:/       |  |::\\   
+  /  /:/  \\:\\   |  |:|:\\    /  /:/        |  |:|:\\  
+ /__/:/ \\__\\:|__|__|:|\\:\\  /  /:/  ___  __|__|:|\\:\\ 
+ \\  \\:\\ /  /:/__/::::| \\:\\/__/:/  /  /\\/__/::::| \\:\\
+  \\  \\:\\  /:/\\  \\:\\~~\\__\\/\\  \\:\\ /  /:/\\  \\:\\~~\\__\\/
+   \\  \\:\\/:/  \\  \\:\\       \\  \\:\\  /:/  \\  \\:\\      
+    \\  \\::/    \\  \\:\\       \\  \\:\\/:/    \\  \\:\\     
+     \\__\\/      \\  \\:\\       \\  \\::/      \\  \\:\\    
+                 \\__\\/        \\__\\/        \\__\\/    
+`);
   return (
     <>
       <Helmet defaultTitle="DMCM" title={`${title} | ${SITE_NAME}`} />
@@ -42,7 +55,8 @@ function Layout({
           sx={{
             backgroundColor: 'primary.main',
             minHeight: '4.25rem',
-            left: 0,
+            // display: 'block',
+            position: 'static',
           }}
         >
           <Box
@@ -50,6 +64,7 @@ function Layout({
               backgroundColor: 'secondary.main',
               boxShadow: 2,
               position: 'absolute',
+              zIndex: 'appBar',
             }}
           >
             <Typography
@@ -88,7 +103,8 @@ function Layout({
         <Container
           component="main"
           sx={{
-            marginTop: '8rem',
+            marginTop: '3rem',
+            position: 'relative',
           }}
         >
           {title && title !== 'Home' && (

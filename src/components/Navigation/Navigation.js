@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Stack } from '@mui/material';
+import { Box, List, Stack } from '@mui/material';
 import { Button } from 'gatsby-theme-material-ui';
 import { NAVIGATION_DATA } from '../../utils/constants';
 
@@ -10,11 +10,17 @@ function Navigation({
     <Box
       component="nav"
       sx={{
-        marginLeft: homeNav ? 0 : 'auto',
-        display: hideNavigation ? 'none' : 'inline',
+        display: hideNavigation && 'none',
       }}
     >
-      <Stack component="ul" direction={navDirection || 'row'}>
+      <Stack
+        component={List}
+        direction={navDirection || 'row'}
+        sx={{
+          py: 2,
+          justifyContent: 'flex-end',
+        }}
+      >
         {NAVIGATION_DATA.map((item) => (
           <Button
             size={size || 'medium'}

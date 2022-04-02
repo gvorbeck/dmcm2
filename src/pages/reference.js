@@ -5,6 +5,7 @@ import {
   Card,
   CardHeader,
   Divider,
+  Fab,
   List,
   ListItem,
   Paper,
@@ -18,20 +19,41 @@ import {
 } from '@mui/material';
 import { Link } from 'gatsby-theme-material-ui';
 import MarkdownView from 'react-showdown';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import Layout from '../components/Layout/Layout';
-import { REFERENCE, TABLE_OF_CONTENTS } from '../utils/constants';
+import { REFERENCE, TABLE_OF_CONTENTS, SCROLL_MARGIN_TOP } from '../utils/constants';
 
 /* Table of Contents */
 function TableOfContents(props) {
   const { referenceData } = props;
   return (
-    <Box>
-      <Typography variant="h3">{TABLE_OF_CONTENTS}</Typography>
-      <List>
-        {referenceData.map((item) => <TableOfContentsItem key={item.category} item={item} />)}
-      </List>
-      <Divider />
-    </Box>
+    <>
+      <Box>
+        <Paper
+          sx={{
+            px: 2,
+            py: 1,
+          }}
+        >
+          <Typography variant="h3">{TABLE_OF_CONTENTS}</Typography>
+          <Divider />
+          <List
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'stretch',
+            }}
+          >
+            {referenceData.map((item) => <TableOfContentsItem key={item.category} item={item} />)}
+          </List>
+        </Paper>
+      </Box>
+      <Divider
+        sx={{
+          my: 4,
+        }}
+      />
+    </>
   );
 }
 
@@ -39,8 +61,18 @@ function TableOfContentsItem(props) {
   const { item } = props;
   const plural = item.posts.length > 1 ? 's' : '';
   return (
-    <ListItem>
-      <Card>
+    <ListItem
+      sx={{
+        width: 'auto',
+        flex: '0 0 25%',
+      }}
+    >
+      <Card
+        raised
+        sx={{
+          height: '100%',
+        }}
+      >
         <CardHeader title={item.category} subheader={`${item.posts.length} Article${plural}`} />
         <Divider />
         <TableOfContentsItemList articles={item.posts} />
@@ -75,7 +107,7 @@ function ReferenceArticles(props) {
   const { referenceData } = props;
   return (
     <Box>
-      <List>
+      <List disablePadding>
         {referenceData.map((item) => (
           <ReferenceArticlesCategoryBlock key={item.category} categoryBlock={item} />
         ))}
@@ -87,9 +119,16 @@ function ReferenceArticles(props) {
 function ReferenceArticlesCategoryBlock(props) {
   const { categoryBlock } = props;
   return (
-    <ListItem>
+    <ListItem
+      disablePadding
+      sx={{
+        '& + &': {
+          mt: 2,
+        },
+      }}
+    >
       <Box>
-        <List>
+        <List disablePadding>
           {categoryBlock.posts.map((item) => (
             <ReferenceArticlesCategoryBlockItem key={item.post.node.id} item={item} />
           ))}
@@ -103,9 +142,20 @@ function ReferenceArticlesCategoryBlockItem(props) {
   const { item } = props;
   const { frontmatter } = item.post.node;
   return (
-    <ListItem>
-      <Box component="article" id={encodeURI(frontmatter.title).toLowerCase()}>
-        <Paper>
+    <ListItem disablePadding>
+      <Box
+        component="article"
+        id={encodeURI(frontmatter.title).toLowerCase()}
+        sx={{
+          scrollMarginTop: SCROLL_MARGIN_TOP,
+        }}
+      >
+        <Paper
+          sx={{
+            px: 2,
+            py: 1,
+          }}
+        >
           <Box component="header">
             <Typography variant="subtitle2" component="h2">
               {frontmatter.category}
@@ -256,6 +306,24 @@ function ReferencePage(props) {
 
   return (
     <Layout title={REFERENCE}>
+      <Fab
+        color="primary"
+        aria-label="Scroll to top"
+        sx={{
+          position: 'fixed',
+          bottom: '1rem',
+          right: '1rem',
+          zIndex: 1,
+        }}
+        onClick={() => {
+          window.scroll({
+            top: 0,
+            behavior: 'smooth',
+          });
+        }}
+      >
+        <ArrowUpwardIcon />
+      </Fab>
       <TableOfContents referenceData={referenceData} />
       <ReferenceArticles referenceData={referenceData} />
     </Layout>

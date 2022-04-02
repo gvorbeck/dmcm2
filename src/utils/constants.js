@@ -4,8 +4,32 @@ import {
   ArrowUpward,
   Info,
   Map,
+  WatchLater,
+  SocialDistance,
+  Extension,
 } from '@mui/icons-material';
+import DmcmDamageIcon from '../images/exploding-planet.svg';
+import DmcmAttackIcon from '../images/bullseye.svg';
 
+// NEW NEW CONSTANTS (CHECK IMPORTS AGAIN)
+// Universals
+export const SCROLL_MARGIN_TOP = '8rem'; // delete this.
+export const CARD_HEADER_STYLES = {
+  textTransform: 'capitalize',
+  typography: 'h5',
+};
+export const SCROLL_BEHAVIOR = {
+  behavior: 'smooth',
+  block: 'start',
+};
+// Location Page
+export const MAP = 'map';
+export const GENERAL = 'general information';
+export const UP = 'up';
+export const DOWN = 'down';
+// END NEW NEW CONSTANTS
+
+export const SPELL_STAT_ICONS = [<WatchLater />, <SocialDistance />, <Extension />, <WatchLater />, <DmcmAttackIcon width="24" fill="white" />, <DmcmDamageIcon width="24" fill="White" />];
 export const SITE_NAME = 'Dungeon Master\'s Campaign Manager';
 export const SITE_SHORT_NAME = 'DMCM';
 export const FOOTER_COPY = `${SITE_NAME} © ${new Date().getFullYear()} J. Garrett Vorbeck`;
@@ -112,13 +136,32 @@ export const BESTIARY = 'Bestiary';
 export const SPELLBOOK = 'Spellbook';
 export const UNKNOWN_SEARCH_TYPE = 'category url param missing';
 export const LIFE_STAT_NAMES = ['Armor Class', 'Hit Points'];
-export const STRING_STAT_NAMES = ['Speed', 'Saving Throws', 'Skills'];
-export const SIMPLE_STAT_NAMES = ['Damage Vulnerabilities', 'Damage Resistances', 'Damage Immunities', 'Condition Immunities', 'Senses', 'Languages', 'Challenge'];
+// export const TABLE_STAT_NAMES = ['Speed', 'Saving Throws', 'Skills', 'Senses'];
+export const TABLE_STAT_NAMES = [
+  {
+    title: 'Speed',
+    columns: ['Type', 'Distance'],
+  },
+  {
+    title: 'Saving Throws',
+    columns: ['Ability', 'Modifier'],
+  },
+  {
+    title: 'Skills',
+    columns: ['Skill', 'Modifier'],
+  },
+  {
+    title: 'Senses',
+    columns: ['Sense', 'Sensitivity'],
+  },
+];
+export const SIMPLE_STAT_NAMES = ['Damage Vulnerabilities', 'Damage Resistances', 'Damage Immunities', 'Condition Immunities', 'Languages', 'Challenge'];
 export const INFO_STAT_NAMES = ['Traits', 'Actions', 'Reactions', 'Legendary Actions'];
 export const SPELL_STAT_NAMES = ['Casting Time', 'Range', 'Components', 'Duration', 'Attack/Save', 'Damage'];
-export const SCROLL_MARGIN_TOP = '8rem';
 export const BLOCK_HEADER_STYLES = {
   backgroundColor: 'primary.main',
   padding: 1,
   color: 'common.white',
 };
+export const SPELL_LEVEL_LABEL = 'Level';
+export const RITUAL_EXPLAINER = 'A ritual spell can be cast following the normal rules for spellcasting, or the spell can be cast as a ritual. The ritual version of a spell takes 10 minutes longer to cast than normal. It also doesn’t expend a spell slot, which means the ritual version of a spell can’t be cast at a higher level.';

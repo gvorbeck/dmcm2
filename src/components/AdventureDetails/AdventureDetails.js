@@ -43,7 +43,7 @@ function AdventureDescription(props) {
   return (
     <Box
       sx={{
-        padding: 1,
+        px: 2,
       }}
     >
       <MDXRenderer>{body}</MDXRenderer>
