@@ -1,9 +1,0 @@
-node_modules/
-.cache/
-public
-**/.DS_Store
-
-# Ignore everything in the content directory,
-# content/*
-# Except
-# !/content/spells/example-spells.mdx
