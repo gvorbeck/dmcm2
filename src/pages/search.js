@@ -13,9 +13,13 @@ import React from 'react';
 import { graphql } from 'gatsby';
 import {
   Autocomplete,
+  Avatar,
   Box,
   Button,
   ButtonGroup,
+  Card,
+  CardContent,
+  CardHeader,
   Divider,
   IconButton,
   List,
@@ -53,22 +57,77 @@ import {
 import * as CREATURE_TYPES from '../images/creature-types';
 import * as MAGIC_TYPES from '../images/magic-types';
 
+function SearchPage({ data, location }) {
+  const search = new URLSearchParams(location.search.substring(1));
+  const category = search.get('category');
+  const searchData = {
+    monsters: [],
+    spells: [],
+  };
+
+  let searchTitle;
+  if (category === 'monsters') {
+    searchTitle = BESTIARY;
+  } else if (category === 'spells') {
+    searchTitle = SPELLBOOK;
+  } else {
+    searchTitle = UNKNOWN_SEARCH_TYPE;
+  }
+
+  if (category) {
+    data.allMdx.edges.forEach((source) => {
+      const content = source.node.frontmatter;
+      if (content[category]) {
+        content[category].forEach((obj) => {
+          searchData[category].push(obj);
+        });
+      }
+    });
+    searchData[category].sort((a, b) => a.name.localeCompare(b.name));
+  } else {
+    console.error('DMCM ERROR: URL Param: \'category\' is missing. Search will not work.');
+  }
+
+  let startingValue;
+  if (location.state && location.state.query) {
+    const result = searchData[category].filter((obj) => (
+      obj.name.toUpperCase() === location.state.query.toUpperCase()
+    ));
+    startingValue = result;
+  }
+  const [value, setValue] = React.useState(startingValue || []);
+
+  return (
+    <Layout title={searchTitle}>
+      <Box>
+        <SearchForm
+          searchTitle={searchTitle}
+          value={value}
+          setValue={setValue}
+          data={searchData[category]}
+          category={category}
+        />
+        <SearchResults value={value} />
+      </Box>
+    </Layout>
+  );
+}
+
 function SearchForm({
   data, setValue, value, searchTitle,
 }) {
-  // If the category changes, change the value to empty so that react doesn't attempt to
-  // render results from one category as another category.
-  // NOTE: There may be a better place for this, but for now this works.
-  // React.useEffect(() => {
-  //   setValue([]);
-  // }, [category]);
-
   return (
-    <Box>
+    <Box
+      sx={{
+        position: 'sticky',
+        top: '1rem',
+        zIndex: 'appBar',
+        boxShadow: 5,
+      }}
+    >
       <Paper>
         <Autocomplete
           multiple
-          id="tags-outlined"
           options={data}
           getOptionLabel={(option) => option.name}
           filterSelectedOptions
@@ -96,19 +155,23 @@ function SearchResults({ value }) {
         marginTop: 2,
       }}
     >
-      {value.length > 0 && (
-        <List
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 50%)',
-            gap: 2,
-          }}
-        >
-          {value.map((item) => (
-            <SearchResultsItem key={item.name} item={item} />
-          ))}
-        </List>
-      )}
+      <Paper>
+        {value.length > 0 && (
+          <List
+            disablePadding
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              gap: 2,
+              p: 2,
+            }}
+          >
+            {value.map((item) => (
+              <SearchResultsItem key={item.name} item={item} />
+            ))}
+          </List>
+        )}
+      </Paper>
     </Box>
   );
 }
@@ -121,37 +184,27 @@ function SearchResultsItem({ item }) {
         display: 'block',
       }}
     >
-      <Box component="article">
-        <Paper
-          sx={{
-            px: 2,
-            py: 1,
-          }}
-        >
-          <SearchResultsItemHeader item={item} />
-          <SearchResultsItemContent item={item} />
-        </Paper>
-      </Box>
+      <Card raised>
+        <SearchResultsItemHeader item={item} />
+        <SearchResultsItemContent item={item} />
+      </Card>
     </ListItem>
   );
 }
 function SearchResultsItemHeader({ item }) {
-  let Avatar;
+  let DmcmIcon;
   let subtitle;
-  let tooltip = '';
   if (item.type) {
     Object.keys(CREATURE_TYPES).forEach((c) => {
       if (item.type.toUpperCase().search(c.toUpperCase()) > -1) {
-        Avatar = CREATURE_TYPES[c];
-        tooltip = item.type;
+        DmcmIcon = CREATURE_TYPES[c];
       }
     });
     subtitle = item.type;
   } else if (item.school) {
     Object.keys(MAGIC_TYPES).forEach((m) => {
       if (item.school.toUpperCase().search(m.toUpperCase()) > -1) {
-        Avatar = MAGIC_TYPES[m];
-        tooltip = item.school;
+        DmcmIcon = MAGIC_TYPES[m];
       }
     });
     const ritualExplainer = RITUAL_EXPLAINER;
@@ -172,44 +225,25 @@ function SearchResultsItemHeader({ item }) {
     console.error('Searched item not recognized. Make sure your content follows frontmatter guidelines.');
   }
   return (
-    <Box
-      component="header"
-      sx={{
-        position: 'relative',
-      }}
-    >
-      <Tooltip title={tooltip}>
-        <SvgIcon
-          inheritViewBox
-          sx={{
-            width: 48,
-            height: 48,
-            position: 'absolute',
-            right: 0,
-            top: 0,
-          }}
-        >
-          <Avatar />
-        </SvgIcon>
-      </Tooltip>
-      <Typography
-        variant="h2"
-        component="h1"
-        sx={{
-          fontWeight: 700,
-          letterSpacing: '3px',
-        }}
-      >
-        {item.name}
-      </Typography>
-      <Typography
-        variant="h5"
-        component="h2"
-      >
-        {subtitle}
-      </Typography>
+    <>
+      <CardHeader
+        disableTypography
+        avatar={(
+          <Avatar
+            sx={{
+              bgcolor: 'secondary.main',
+            }}
+          >
+            <SvgIcon>
+              <DmcmIcon />
+            </SvgIcon>
+          </Avatar>
+        )}
+        title={<Typography variant="h6" component="h3">{item.name}</Typography>}
+        subheader={<Typography variant="body1">{subtitle}</Typography>}
+      />
       <Divider />
-    </Box>
+    </>
   );
 }
 
@@ -220,11 +254,7 @@ function SearchResultsItemContent({ item }) {
     item.school && <SearchResultItemContentSpell spell={item} />
   );
   return (
-    <Box
-      sx={{
-        marginTop: 4,
-      }}
-    >
+    <CardContent>
       {content}
       <Typography
         variant="body2"
@@ -234,7 +264,7 @@ function SearchResultsItemContent({ item }) {
       >
         {item.source}
       </Typography>
-    </Box>
+    </CardContent>
   );
 }
 
@@ -267,6 +297,7 @@ function SearchResultItemContentMonster({ monster }) {
 function MonsterAbilityList({ abilities }) {
   return (
     <ButtonGroup
+      variant="contained"
       sx={{
         width: '100%',
         justifyContent: 'center',
@@ -337,6 +368,7 @@ function MonsterStats({
   reactions,
   lgdyactions,
 }) {
+  console.log(ac);
   const simpleStat = (stat) => {
     const listItems = [];
     if (typeof stat === 'object' || typeof stat === 'string') {
@@ -565,60 +597,6 @@ function SpellStats({
         </ListItem>
       ))}
     </List>
-  );
-}
-
-function SearchPage({ data, location }) {
-  const search = new URLSearchParams(location.search.substring(1));
-  const category = search.get('category');
-  const searchData = {
-    monsters: [],
-    spells: [],
-  };
-
-  let searchTitle;
-  if (category === 'monsters') {
-    searchTitle = BESTIARY;
-  } else if (category === 'spells') {
-    searchTitle = SPELLBOOK;
-  } else {
-    searchTitle = UNKNOWN_SEARCH_TYPE;
-  }
-
-  if (category) {
-    data.allMdx.edges.forEach((source) => {
-      const content = source.node.frontmatter;
-      if (content[category]) {
-        content[category].forEach((obj) => {
-          searchData[category].push(obj);
-        });
-      }
-    });
-    searchData[category].sort((a, b) => a.name.localeCompare(b.name));
-  } else {
-    console.error('DMCM ERROR: URL Param: \'category\' is missing. Search will not work.');
-  }
-
-  let startingValue;
-  if (location.state && location.state.query) {
-    const result = searchData[category].filter((obj) => (
-      obj.name.toUpperCase() === location.state.query.toUpperCase()
-    ));
-    startingValue = result;
-  }
-  const [value, setValue] = React.useState(startingValue || []);
-
-  return (
-    <Layout title={searchTitle}>
-      <SearchForm
-        searchTitle={searchTitle}
-        value={value}
-        setValue={setValue}
-        data={searchData[category]}
-        category={category}
-      />
-      <SearchResults value={value} />
-    </Layout>
   );
 }
 

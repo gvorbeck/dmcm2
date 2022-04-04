@@ -4,6 +4,7 @@ import {
   Box,
   Card,
   CardHeader,
+  CardContent,
   Divider,
   Fab,
   List,
@@ -20,8 +21,9 @@ import {
 import { Link } from 'gatsby-theme-material-ui';
 import MarkdownView from 'react-showdown';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import Masonry from '@mui/lab/Masonry';
 import Layout from '../components/Layout/Layout';
-import { REFERENCE, TABLE_OF_CONTENTS, SCROLL_MARGIN_TOP } from '../utils/constants';
+import { REFERENCE } from '../utils/constants';
 
 /* Table of Contents */
 function TableOfContents(props) {
@@ -31,13 +33,11 @@ function TableOfContents(props) {
       <Box>
         <Paper
           sx={{
-            px: 2,
-            py: 1,
+            p: 2,
           }}
         >
-          <Typography variant="h3">{TABLE_OF_CONTENTS}</Typography>
-          <Divider />
           <List
+            disablePadding
             sx={{
               display: 'flex',
               flexDirection: 'row',
@@ -62,6 +62,8 @@ function TableOfContentsItem(props) {
   const plural = item.posts.length > 1 ? 's' : '';
   return (
     <ListItem
+      disablePadding
+      disableGutters
       sx={{
         width: 'auto',
         flex: '0 0 25%',
@@ -85,7 +87,9 @@ function TableOfContentsItemList(props) {
   const { articles } = props;
   return (
     <List>
-      {articles.map((article) => <TableOfContentsItemListLink article={article} />)}
+      {articles.map((article) => (
+        <TableOfContentsItemListLink key={article.post.node.frontmatter.title} article={article} />
+      ))}
     </List>
   );
 }
@@ -107,11 +111,17 @@ function ReferenceArticles(props) {
   const { referenceData } = props;
   return (
     <Box>
-      <List disablePadding>
-        {referenceData.map((item) => (
-          <ReferenceArticlesCategoryBlock key={item.category} categoryBlock={item} />
-        ))}
-      </List>
+      <Paper
+        sx={{
+          p: 2,
+        }}
+      >
+        <List disablePadding>
+          {referenceData.map((item) => (
+            <ReferenceArticlesCategoryBlock key={item.category} categoryBlock={item} />
+          ))}
+        </List>
+      </Paper>
     </Box>
   );
 }
@@ -121,18 +131,25 @@ function ReferenceArticlesCategoryBlock(props) {
   return (
     <ListItem
       disablePadding
+      disableGutters
       sx={{
         '& + &': {
           mt: 2,
         },
+        display: 'block',
       }}
     >
       <Box>
-        <List disablePadding>
+        <Masonry columns={2} spacing={2}>
           {categoryBlock.posts.map((item) => (
             <ReferenceArticlesCategoryBlockItem key={item.post.node.id} item={item} />
           ))}
-        </List>
+        </Masonry>
+        {/* <List disablePadding>
+          {categoryBlock.posts.map((item) => (
+            <ReferenceArticlesCategoryBlockItem key={item.post.node.id} item={item} />
+          ))}
+        </List> */}
       </Box>
     </ListItem>
   );
@@ -142,13 +159,38 @@ function ReferenceArticlesCategoryBlockItem(props) {
   const { item } = props;
   const { frontmatter } = item.post.node;
   return (
-    <ListItem disablePadding>
-      <Box
+    <Box id={encodeURI(frontmatter.title).toLowerCase()}>
+      <Card raised>
+        <CardHeader title={frontmatter.title} subheader={frontmatter.category} />
+        <Divider />
+        <CardContent>
+          {frontmatter.content && frontmatter.content.map((piece) => {
+            if (piece.type === 'dl') {
+              return <ReferenceArticlesCategoryBlockItemDl key={piece.title} content={piece} />;
+            }
+            if (piece.type === 'table') {
+              return (
+                <ReferenceArticlesCategoryBlockItemTable
+                  key={piece.title}
+                  content={piece}
+                />
+              );
+            }
+            if (piece.type === 'markdown') {
+              return (
+                <ReferenceArticlesCategoryBlockItemMarkdown
+                  key={piece.title}
+                  content={piece}
+                />
+              );
+            }
+            return null;
+          })}
+        </CardContent>
+      </Card>
+      {/* <Box
         component="article"
         id={encodeURI(frontmatter.title).toLowerCase()}
-        sx={{
-          scrollMarginTop: SCROLL_MARGIN_TOP,
-        }}
       >
         <Paper
           sx={{
@@ -192,34 +234,51 @@ function ReferenceArticlesCategoryBlockItem(props) {
             </Box>
           )}
         </Paper>
-      </Box>
-    </ListItem>
+      </Box> */}
+    </Box>
   );
 }
 
 function ReferenceArticlesCategoryBlockItemDl(props) {
   const { content } = props;
   return (
-    <Box>
-      <Box component="dl">
-        {content.terms.map((term) => (
-          <Box key={term.dt} sx={{ typography: 'body1' }}>
-            <Typography variant="h5" component="dt">{term.dt}</Typography>
-            <Box component="dd">
-              {term.dd.short && <Typography variant="subtitle1" component="p">{term.dd.short}</Typography>}
-              {term.dd.cite && <Typography variant="subtitle2" component="p">{term.dd.cite}</Typography>}
-              {term.dd.text && (
-                <MarkdownView
-                  markdown={term.dd.text}
-                  // components={}
-                  options={{ tables: true }}
-                />
-              )}
-            </Box>
-          </Box>
-        ))}
-      </Box>
-    </Box>
+    <List>
+      {content.terms.map((term) => (
+        <ListItem key={term.dt} sx={{ display: 'block' }}>
+          <Typography variant="h6" component="h4">{term.dt}</Typography>
+          {term.dd.short && <Typography variant="subtitle1" component="p">{term.dd.short}</Typography>}
+          {term.dd.cite && <Typography variant="subtitle2" component="p">{term.dd.cite}</Typography>}
+          <Divider />
+          {term.dd.text && (
+            <MarkdownView
+              markdown={term.dd.text}
+              // components={}
+              options={{ tables: true }}
+            />
+          )}
+        </ListItem>
+      ))}
+    </List>
+    // <Box>
+    //   <Box component="dl">
+    //     {content.terms.map((term) => (
+    //       <Box key={term.dt} sx={{ typography: 'body1' }}>
+    //         <Typography variant="h5" component="dt">{term.dt}</Typography>
+    //         <Box component="dd">
+    //           {term.dd.short && <Typography variant="subtitle1" component="p">{term.dd.short}</Typography>}
+    //           {term.dd.cite && <Typography variant="subtitle2" component="p">{term.dd.cite}</Typography>}
+    //           {term.dd.text && (
+    //             <MarkdownView
+    //               markdown={term.dd.text}
+    //               // components={}
+    //               options={{ tables: true }}
+    //             />
+    //           )}
+    //         </Box>
+    //       </Box>
+    //     ))}
+    //   </Box>
+    // </Box>
   );
 }
 function ReferenceArticlesCategoryBlockItemTable(props) {

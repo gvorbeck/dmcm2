@@ -27,6 +27,16 @@ export const MAP = 'map';
 export const GENERAL = 'general information';
 export const UP = 'up';
 export const DOWN = 'down';
+export const UNKNOWN_FLAG = 'The flag listed in this location\'s frontmatter is unrecognized.';
+export const FLAG_TOOLTIPS = {
+  person: 'A person of interest is here.',
+  monster: 'Monster(s) present here.',
+  secret: 'There are hidden passages or items here.',
+  eyes: 'Players can/are being observed here.',
+  treasure: 'There is loot here.',
+  trap: 'There is a trap here.',
+  boss: 'A boss level monster is here.',
+};
 // END NEW NEW CONSTANTS
 
 export const SPELL_STAT_ICONS = [<WatchLater />, <SocialDistance />, <Extension />, <WatchLater />, <DmcmAttackIcon width="24" fill="white" />, <DmcmDamageIcon width="24" fill="White" />];
@@ -129,9 +139,8 @@ export const LOCATION_NAVIGATION = [
   },
 ];
 export const GENERAL_INFORMATION = 'General Information';
-export const UNKNOWN_ROOM_FLAG = 'The flag listed in this location\'s frontmatter is unrecognized.';
+
 export const REFERENCE = 'Reference';
-export const TABLE_OF_CONTENTS = 'Table of Contents';
 export const BESTIARY = 'Bestiary';
 export const SPELLBOOK = 'Spellbook';
 export const UNKNOWN_SEARCH_TYPE = 'category url param missing';
