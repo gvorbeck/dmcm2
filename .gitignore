@@ -4,6 +4,7 @@ public
 **/.DS_Store
 
 # Ignore everything in the content directory,
-content
-# Except
-!*/content/spells/example-spells.mdx
+content/*
+!content/spells
+content/spells/*
+!/content/spells/example-spells.mdx
